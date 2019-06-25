@@ -24,7 +24,7 @@ router.post('/api/v1/videos', (req, res) => {
     //console.log("name", name);
     const video = new Video({ name });
     //video.path = `http://${ env.HOST_PRODUCTION }:${ env.PORT}/assets/video/${video._id}.mp4`;
-    video.path = `http://${ env.HOST_PRODUCTION }/assets/video/${video._id}.mp4`;
+    video.path = `${ env.HOST_PRODUCTION }/assets/video/${video._id}.mp4`;
     
     video.save()
             .then( msj => res.json({ status: 200, video }))
