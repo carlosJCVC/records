@@ -1,14 +1,26 @@
 const express = require('express');
 const cors = require('cors');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
+const fileUpload = require('express-fileupload');
+const path = require('path');
+const env = require('./env.json');
 
 const app = express();
 
+app.set('port', process.env.PORT || env.PORT);
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 1000000 }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
 
-const routes = require('./src/routes/records');
+//Importing and init database
+require('./src/config/database');
+
+const routesRecords = require('./src/routes/records');
+const routesUploads = require('./src/routes/upload');
 
 var corsOptions = {
     origin: '*',
@@ -18,10 +30,15 @@ var corsOptions = {
 app.use(cors(corsOptions))
 
 //Routes
-app.use(routes);
+app.use(routesRecords);
+app.use(routesUploads);
+
+console.log(path.join(__dirname, 'assets/video'))
+app.use(express.static(path.join(__dirname, 'assets/video')));
+app.use("/assets/video", express.static(__dirname + '/assets/video'));
 
 
 //Server listenning
-app.listen("7500", () => {
-    console.log('Server running in 127.0.0.1:7500');
+app.listen(app.get('port'), () => {
+    console.log(`Server running in ${ env.HOST }:${ env.PORT}`);
 });

@@ -2,6 +2,12 @@ const router = require('express').Router();
 const IncomingForm = require('formidable').IncomingForm;
 const fs = require('fs');
 
+router.get('/api/v1/records', (req, res) => {
+    //const { recordID, provider, customer, serviceType, serviceOutput, description, date, servicePrice, image } = req.body;
+
+    res.json({ status: 200, files: "exist" });
+});
+
 router.post('/api/v1/records', (req, res) => {
     //const { recordID, provider, customer, serviceType, serviceOutput, description, date, servicePrice, image } = req.body;
 
