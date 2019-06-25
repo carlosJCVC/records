@@ -15,7 +15,7 @@ var upload = multer({ storage: storage })
 */
 router.get('/api/v1/videos', async (req, res) => {
     const videos = await Video.find();
-    
+
     res.json({ status: 200, data: videos });
 });
 
@@ -23,7 +23,7 @@ router.post('/api/v1/videos', (req, res) => {
     const { name } = req.body;
     //console.log("name", name);
     const video = new Video({ name });
-    video.path = `http://${ env.HOST }:${ env.PORT}/assets/video/${video._id}.mp4`;
+    video.path = `http://${ env.HOST_PRODUCTION }:${ env.PORT}/assets/video/${video._id}.mp4`;
     
     video.save()
             .then( msj => res.json({ status: 200, video }))
