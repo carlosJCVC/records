@@ -3,11 +3,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const path = require('path');
-const env = require('./env.json');
+require('dotenv').config()
 
 const app = express();
 
-app.set('port', process.env.PORT || env.PORT);
+app.set('port', process.env.PORT || process.env.APP_PORT);
 
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 1000000 }));
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -33,12 +33,11 @@ app.use(cors(corsOptions))
 app.use(routesRecords);
 app.use(routesUploads);
 
-console.log(path.join(__dirname, 'assets/video'))
-app.use(express.static(path.join(__dirname, 'assets/video')));
-app.use("/assets/video", express.static(__dirname + '/assets/video'));
+app.use(express.static(path.join(__dirname, process.env.UPLOAD_URL)));
+app.use(process.env.UPLOAD_URL, express.static(__dirname + process.env.UPLOAD_URL));
 
 
 //Server listenning
 app.listen(app.get('port'), () => {
-    console.log(`Server running in ${ env.HOST }:${ env.PORT}`);
-});
+    console.log(`Server running in ${ process.env.APP_URL }:${ process.env.APP_PORT }`);
+})
